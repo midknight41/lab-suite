@@ -1,6 +1,6 @@
 
 # lab-suite
-Simple to create reusable lab test suites.
+Simple tool to create reusable lab test suites.
 
 ## Installation
 
