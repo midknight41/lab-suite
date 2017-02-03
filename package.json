@@ -1,6 +1,6 @@
 {
   "name": "lab-suite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A extremely simple approach to making lab testing suites",
   "main": "./dist/lib/index.js",
   "scripts": {
