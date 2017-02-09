@@ -26,7 +26,9 @@
   "keywords": [
     "lab",
     "testing",
-    "hapi"
+    "hapi",
+    "suite",
+    "template"
   ],
   "author": "Chad Macey",
   "license": "MIT",
@@ -35,7 +37,7 @@
   },
   "homepage": "https://github.com/midknight41/lab-suite#readme",
   "dependencies": {
-    "code": "^4.0.0"
+    "object-mapper": "^3.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.22.2",
@@ -44,11 +46,11 @@
     "babel-plugin-transform-es2015-parameters": "^6.22.0",
     "babel-plugin-transform-es2015-spread": "^6.22.0",
     "babel-preset-env": "^1.1.8",
+    "code": "^4.0.0",
     "eslint": "^3.15.0",
     "lab": "^12.1.0",
     "lab-testing": "^2.1.0",
-    "rimraf": "^2.5.4",
-    "sinon": "^1.17.7"
+    "rimraf": "^2.5.4"
   },
   "files": [
     "dist"
