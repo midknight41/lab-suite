@@ -10,6 +10,7 @@
     "pret": "npm run build",
     "t": "lab ./dist/test/ -v -S --assert code",
     "pretest": "npm run build",
+    "travis": "npm run test",
     "test": "lab ./dist/test/ -v -S --assert code",
     "premajor": "npm run test",
     "major": "npm version major -m \"published to npm as v%s\" && git push --follow-tags && npm publish",
