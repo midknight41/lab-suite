@@ -13,7 +13,7 @@ export default class ExpectProxy {
   buildProxy_() {
 
     const grammar = ["a", "an", "to", "be"];
-    const methods = ["string", "function", "number", "date", "object", "array"];
+    const methods = ["string", "function", "number", "date", "object", "array", "anything"];
 
     // build properties for the elements of grammar
     for (const propName of grammar) {

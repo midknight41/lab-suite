@@ -142,7 +142,21 @@ group("LabSuite", () => {
       mySuite.run(fakeLab, expected);
     };
 
-    expect(throws).to.throw(Error, /not an object/);
+    expect(throws).to.throw(Error, /an object/);
+    return done();
+
+  });
+
+  lab.test("An anything expectation has no adverse effect", done => {
+
+    mySuite.expect("SERVICE_NAME").to.be.anything();
+
+    mySuite.declare(() => {
+
+    });
+
+    mySuite.run(fakeLab, expected);
+
     return done();
 
   });

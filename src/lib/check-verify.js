@@ -5,8 +5,9 @@ const objectMapper = mod;
 
 export default class CheckVerify {
 
-  constructor() {
+  constructor(suiteMode) {
 
+    this.suiteMode = suiteMode ? suiteMode : true;
     this.fastFailEnabled = false;
     this.currentCheck = null;
     this.checks = [];
@@ -63,6 +64,11 @@ export default class CheckVerify {
     this.finaliseChecks_();
 
     return this.checks;
+  }
+
+  anything() {
+    // doesn't do anything but allows the implementor to document the expectation
+    return this;
   }
 
   array() {
@@ -248,6 +254,16 @@ export default class CheckVerify {
 
     let message = "";
 
+    if (this.suiteMode) {
+
+      if (name) {
+        message = `The test suite expected "${name}" to be ${testName}`;
+      }
+
+      return new Error(message);
+    }
+
+    // The test suite expected X to be a populated string
     if (name) {
       message = `the parameter "${name}" is not ${testName}`;
     } else {
@@ -255,12 +271,14 @@ export default class CheckVerify {
     }
 
     return new Error(message);
+
+
   }
 
 }
 
 function validator() {
-  return new CheckVerify();
+  return new CheckVerify(false);
 }
 
 module.exports.validator = validator;
