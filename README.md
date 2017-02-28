@@ -16,13 +16,24 @@ npm install lab-suite -D
 ## Create a suite
 To create a suite follow the example below.
 
-You can also set the expectations for usage of the suite to make it easier for someone to implement. These expectations will be checked when the suite is run.
+You can also set the expectations for the usage of the suite to make it easier for someone to implement. These expectations will be checked when the suite is run.
+
+```suite.expect``` currently supports the following expectations:
+
+- string
+- function
+- number 
+- date
+- object
+- array
+- anything (This doesn't perform an actual check but it's good for documenting the intended use of the suite)
 
 ```js
 import labSuite from "lab-suite";
 
 const suite = labSuite.create();
 
+// These expectations double as documentation for someone implementing the suite
 suite.expect("SERVICE").to.be.a.function();
 suite.expect("SERVICE_CALL").to.be.a.string();
 suite.expect("SERVICE_INPUT").to.be.an.array();
