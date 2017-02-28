@@ -29,7 +29,7 @@ group("LabSuite", () => {
 
   lab.beforeEach(done => {
 
-    expected = { SERVICE_NAME: "Name1", SERVICE_PARAMS: [1, 2, 3] };
+    expected = { SERVICE_NAME: "Name1", SERVICE_PARAMS: [1, 2, 3], THROWN_ERROR: new Error("Failed") };
     fakeLab = {
       test: () => {
         return;
@@ -161,6 +161,37 @@ group("LabSuite", () => {
 
   });
 
+  lab.test("An error expectation does not throw if variable is an error", done => {
+
+    mySuite.expect("THROWN_ERROR").to.be.an.error();
+
+    mySuite.declare(() => {
+
+    });
+
+    mySuite.run(fakeLab, expected);
+
+    return done();
+
+  });
+
+  lab.test("An error expectation throws if variable is not an error", done => {
+
+    mySuite.expect("THROWN_ERROR").to.be.an.error();
+
+    const variables = { SERVICE_NAME: "Name1", SERVICE_PARAMS: [1, 2, 3], THROWN_ERROR: "a string" };
+
+    mySuite.declare(() => {
+
+    });
+
+    const throws = function () {
+      mySuite.run(fakeLab, variables);
+    };
+
+    expect(throws).to.throw(Error, /an error/);
+    return done();
+
+  });
 
 });
-
