@@ -77,6 +77,12 @@ export default class CheckVerify {
     return this;
   }
 
+  error() {
+
+    this.registerAndCheckFastFail_("error");
+    return this;
+  }
+
   object() {
 
     this.registerAndCheckFastFail_("object");
@@ -204,6 +210,11 @@ export default class CheckVerify {
 
   functionTest_(object, name) {
     if (object === null || object === undefined || typeof object !== "function") return this.generateError(name, "a function");
+    return null;
+  }
+
+  errorTest_(object, name) {
+    if (object === null || object === undefined || object instanceof Error === false) return this.generateError(name, "an error");
     return null;
   }
 
