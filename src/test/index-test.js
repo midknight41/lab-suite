@@ -194,4 +194,23 @@ group("LabSuite", () => {
 
   });
 
+  lab.test("An boolean expectation throws if variable is not an error", done => {
+
+    mySuite.expect("BOOLEAN").to.be.a.boolean();
+
+    const variables = { SERVICE_NAME: "Name1", SERVICE_PARAMS: [1, 2, 3], BOOLEAN: "a string" };
+
+    mySuite.declare(() => {
+
+    });
+
+    const throws = function () {
+      mySuite.run(fakeLab, variables);
+    };
+
+    expect(throws).to.throw(Error, /a boolean/);
+    return done();
+
+  });
+
 });

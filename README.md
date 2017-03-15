@@ -26,6 +26,8 @@ You can also set the expectations for the usage of the suite to make it easier f
 - date
 - object
 - array
+- error
+- boolean
 - anything (This doesn't perform an actual check but it's good for documenting the intended use of the suite)
 
 ```js
