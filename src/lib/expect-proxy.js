@@ -24,10 +24,19 @@ export default class ExpectProxy {
 
     }
 
+    Object.defineProperty(this, "or", {
+      get: () => {
+        this.checker.enableOrMode();
+        return this;
+      }
+    });
+
+
     // map methodName to methods on CheckVerify
     for (const methodName of methods) {
       this[methodName] = () => {
         this.checker[methodName]();
+        return this;
       };
     }
   }

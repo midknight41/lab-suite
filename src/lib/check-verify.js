@@ -24,7 +24,7 @@ export default class CheckVerify {
 
     this.finaliseChecks_();
 
-    this.currentCheck = { field, tests: [], required: true };
+    this.currentCheck = { field, tests: [], required: true, orMode: false };
     this.finalised = false;
 
     return this;
@@ -40,10 +40,14 @@ export default class CheckVerify {
 
     this.finaliseChecks_();
 
-    this.currentCheck = { field, tests: [], required: false };
+    this.currentCheck = { field, tests: [], required: false, orMode: false };
     this.finalised = false;
 
     return this;
+  }
+
+  enableOrMode() {
+    this.currentCheck.orMode = true;
   }
 
   verify(source) {
@@ -176,9 +180,11 @@ export default class CheckVerify {
 
   runTests_(source, item) {
 
+    const errors = [];
+
     for (const test of item.tests) {
 
-      const value = objectMapper.getKeyValue(source, item.field); // source[item.field];
+      const value = objectMapper.getKeyValue(source, item.field);
 
       // Only test required fields if the value isn't present
       if (item.required === false) {
@@ -191,11 +197,32 @@ export default class CheckVerify {
 
       const error = this[`${test}Test_`](value, item.field);
 
-      if (error !== null) {
+      if (error !== null && item.orMode === false) {
         return error;
+      }
+
+      if (error !== null && item.orMode === true) {
+        errors.push(error);
+      }
+
+    }
+
+    if (errors.length > 0 && errors.length === item.tests.length) {
+
+      let errorMsg = "";
+
+      for (const err of errors) {
+        errorMsg += `${err.message} OR `;
 
       }
 
+      errorMsg = errorMsg.replace(/The test suite expected /g, "");
+
+      if (errorMsg.length > 4) {
+        errorMsg = `The test suite expected ${errorMsg.substring(0, errorMsg.length - 4)}`;
+      }
+
+      return new Error(errorMsg);
     }
 
     return null;

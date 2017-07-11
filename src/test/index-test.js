@@ -29,7 +29,12 @@ group("LabSuite", () => {
 
   lab.beforeEach(done => {
 
-    expected = { SERVICE_NAME: "Name1", SERVICE_PARAMS: [1, 2, 3], THROWN_ERROR: new Error("Failed") };
+    expected = {
+      SERVICE_NAME: "Name1",
+      SERVICE_PARAMS: [1, 2, 3],
+      THROWN_ERROR: new Error("Failed")
+    };
+
     fakeLab = {
       test: () => {
         return;
@@ -111,7 +116,7 @@ group("LabSuite", () => {
     return done();
   });
 
-  lab.test("does not throw if an expectations are met", done => {
+  lab.test("does not throw if expectations are met", done => {
 
     mySuite.expect("SERVICE_NAME").to.be.a.string();
     mySuite.expect("SERVICE_PARAMS").to.be.an.array();
@@ -194,7 +199,7 @@ group("LabSuite", () => {
 
   });
 
-  lab.test("An boolean expectation throws if variable is not an error", done => {
+  lab.test("A boolean expectation throws if variable is not a boolean", done => {
 
     mySuite.expect("BOOLEAN").to.be.a.boolean();
 
@@ -209,6 +214,56 @@ group("LabSuite", () => {
     };
 
     expect(throws).to.throw(Error, /a boolean/);
+    return done();
+
+  });
+
+  lab.test("An or statement does not throw if the first expectation is met", done => {
+
+    mySuite.expect("OBJECT_OR_ARRAY").to.be.an.object().or.an.array();
+
+    const variables = { OBJECT_OR_ARRAY: { "Service": "Name1" } };
+
+    mySuite.declare(() => {
+
+    });
+
+    mySuite.run(fakeLab, variables);
+    return done();
+
+  });
+
+  lab.test("An or statement does not throw if the second expectation is met", done => {
+
+    mySuite.expect("OBJECT_OR_ARRAY").to.be.an.object().or.an.array();
+
+    const variables = { OBJECT_OR_ARRAY: [1, 2, 3] };
+
+    mySuite.declare(() => {
+
+    });
+
+    mySuite.run(fakeLab, variables);
+    return done();
+
+  });
+
+  lab.test("An or statement will throw when all expectations are not met", done => {
+
+    mySuite.expect("OBJECT_OR_ARRAY").to.be.an.object().or.an.array();
+
+    const variables = { OBJECT_OR_ARRAY: "Oh no a string!" };
+
+    mySuite.declare(() => {
+
+    });
+
+    const throws = function () {
+      mySuite.run(fakeLab, variables);
+    };
+
+    expect(throws).to.throw(Error, /The test suite expected \"OBJECT_OR_ARRAY\" to be an object OR \"OBJECT_OR_ARRAY\" to be an array/);
+
     return done();
 
   });
