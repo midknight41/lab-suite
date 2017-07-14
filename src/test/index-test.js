@@ -194,6 +194,7 @@ group("Exceptions", () => {
 
   });
 
+  // Irony. This is pretty much what the lab-suite module does!
   [
     { name: "error", goodValue: new Error(), badValue: "not an error", message: "an error" },
     { name: "boolean", goodValue: true, badValue: "not a boolean", message: "a boolean" },
@@ -204,7 +205,6 @@ group("Exceptions", () => {
     { name: "object", goodValue: { message: "this is good" }, badValue: 1234, message: "an object" },
     { name: "number", goodValue: 1244, badValue: "not a number", message: "a number" },
     { name: "function", goodValue: () => { }, badValue: "not a function", message: "a function" }
-
   ]
     .map(({ goodValue, badValue, name, message }) => {
 
