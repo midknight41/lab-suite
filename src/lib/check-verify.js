@@ -1,7 +1,5 @@
 import * as urlMod from "url";
-import * as mod from "object-mapper";
-
-const objectMapper = mod;
+import { getValue } from "map-factory";
 
 export default class CheckVerify {
 
@@ -12,6 +10,17 @@ export default class CheckVerify {
     this.currentCheck = null;
     this.checks = [];
     this.finalised = false;
+
+    const methods = ["string", "function", "number", "date", "object", "array", "error", "boolean", "url"];
+
+    // map methodName to methods on CheckVerify
+    for (const methodName of methods) {
+      this[methodName] = () => {
+        this.registerAndCheckFastFail_(methodName);
+        return this;
+      };
+    }
+
   }
 
   check(field) {
@@ -75,63 +84,6 @@ export default class CheckVerify {
     return this;
   }
 
-  array() {
-
-    this.registerAndCheckFastFail_("array");
-    return this;
-  }
-
-  error() {
-
-    this.registerAndCheckFastFail_("error");
-    return this;
-  }
-
-  object() {
-
-    this.registerAndCheckFastFail_("object");
-    return this;
-  }
-
-  function() {
-
-    this.registerAndCheckFastFail_("function");
-    return this;
-  }
-
-  number() {
-
-    this.registerAndCheckFastFail_("number");
-    return this;
-
-  }
-
-  boolean() {
-
-    this.registerAndCheckFastFail_("boolean");
-    return this;
-
-  }
-
-  string() {
-
-    this.registerAndCheckFastFail_("string");
-    return this;
-
-  }
-
-  url() {
-
-    this.registerAndCheckFastFail_("url");
-    return this;
-  }
-
-  date() {
-
-    this.registerAndCheckFastFail_("date");
-    return this;
-  }
-
   registerAndCheckFastFail_(type) {
 
     this.checkStarted_();
@@ -184,7 +136,7 @@ export default class CheckVerify {
 
     for (const test of item.tests) {
 
-      const value = objectMapper.getKeyValue(source, item.field);
+      const value = getValue(source, item.field);
 
       // Only test required fields if the value isn't present
       if (item.required === false) {
@@ -201,11 +153,18 @@ export default class CheckVerify {
         return error;
       }
 
-      if (error !== null && item.orMode === true) {
+      if (error !== null) {
         errors.push(error);
       }
 
     }
+
+    // any non-conditional errors would've thrown by now
+    return this.conditionalErrorChecks_(item, errors);
+
+  }
+
+  conditionalErrorChecks_(item, errors) {
 
     if (errors.length > 0 && errors.length === item.tests.length) {
 
@@ -213,7 +172,6 @@ export default class CheckVerify {
 
       for (const err of errors) {
         errorMsg += `${err.message} OR `;
-
       }
 
       errorMsg = errorMsg.replace(/The test suite expected /g, "");

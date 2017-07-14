@@ -67,6 +67,15 @@ suite.declare((lab, variables) => {
 export default suite;
 ```
 
+Additionally, you can use ```or``` to allow more flexible inputs.
+
+```js
+
+suite.expect("SERVICE_INPUT").to.be.an.array.or.an.object();
+
+```
+
+
 ## Run a suite
 
 Import the suite into you test file and do away with boilerplate tests. You can still create normal too if the thing you are testing isn't generic.

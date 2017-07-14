@@ -21,7 +21,7 @@ group("The create() factory method", () => {
 
 });
 
-group("LabSuite", () => {
+group("Suite Interface", () => {
 
   let expected;
   let fakeLab;
@@ -116,6 +116,34 @@ group("LabSuite", () => {
     return done();
   });
 
+});
+
+group("Exceptions", () => {
+
+  let expected;
+  let fakeLab;
+  let mySuite;
+
+  lab.beforeEach(done => {
+
+    expected = {
+      SERVICE_NAME: "Name1",
+      SERVICE_PARAMS: [1, 2, 3],
+      THROWN_ERROR: new Error("Failed")
+    };
+
+    fakeLab = {
+      test: () => {
+        return;
+      }
+    };
+
+    mySuite = new suite.LabSuite();
+
+    return done();
+
+  });
+
   lab.test("does not throw if expectations are met", done => {
 
     mySuite.expect("SERVICE_NAME").to.be.a.string();
@@ -152,7 +180,7 @@ group("LabSuite", () => {
 
   });
 
-  lab.test("An anything expectation has no adverse effect", done => {
+  lab.test("The anything expectation has no adverse effect", done => {
 
     mySuite.expect("SERVICE_NAME").to.be.anything();
 
@@ -166,54 +194,89 @@ group("LabSuite", () => {
 
   });
 
-  lab.test("An error expectation does not throw if variable is an error", done => {
+  [
+    { name: "error", goodValue: new Error(), badValue: "not an error", message: "an error" },
+    { name: "boolean", goodValue: true, badValue: "not a boolean", message: "a boolean" },
+    { name: "string", goodValue: "this is good", badValue: 1234, message: "a populated string" },
+    { name: "number", goodValue: 1244, badValue: "not a number", message: "a number" },
+    { name: "date", goodValue: new Date(), badValue: "not a date", message: "a date" },
+    { name: "array", goodValue: [1, 2, 3], badValue: "not an array", message: "an array" },
+    { name: "object", goodValue: { message: "this is good" }, badValue: 1234, message: "an object" },
+    { name: "number", goodValue: 1244, badValue: "not a number", message: "a number" },
+    { name: "function", goodValue: () => { }, badValue: "not a function", message: "a function" }
 
-    mySuite.expect("THROWN_ERROR").to.be.an.error();
+  ]
+    .map(({ goodValue, badValue, name, message }) => {
 
-    mySuite.declare(() => {
+      lab.test(`The ${name} expectation does not throw if variable is ${message}`, done => {
+
+        mySuite.expect("TEST_VALUE")[name]();
+
+        mySuite.declare(() => {
+
+        });
+
+        mySuite.run(fakeLab, { "TEST_VALUE": goodValue });
+
+        return done();
+
+      });
+
+      lab.test(`The ${name} expectation throws if variable is not ${message}`, done => {
+
+        mySuite.expect("TEST_VALUE")[name]();
+
+        mySuite.declare(() => {
+
+        });
+
+        const throws = function () {
+          mySuite.run(fakeLab, { TEST_VALUE: badValue });
+        };
+
+        expect(throws).to.throw(Error, new RegExp(message));
+        return done();
+
+      });
 
     });
 
-    mySuite.run(fakeLab, expected);
+  // lab.test("A boolean expectation throws if variable is not a boolean", done => {
 
-    return done();
+  //   mySuite.expect("BOOLEAN").to.be.a.boolean();
 
-  });
+  //   const variables = { SERVICE_NAME: "Name1", SERVICE_PARAMS: [1, 2, 3], BOOLEAN: "a string" };
 
-  lab.test("An error expectation throws if variable is not an error", done => {
+  //   mySuite.declare(() => {
 
-    mySuite.expect("THROWN_ERROR").to.be.an.error();
+  //   });
 
-    const variables = { SERVICE_NAME: "Name1", SERVICE_PARAMS: [1, 2, 3], THROWN_ERROR: "a string" };
+  //   const throws = function () {
+  //     mySuite.run(fakeLab, variables);
+  //   };
 
-    mySuite.declare(() => {
+  //   expect(throws).to.throw(Error, /a boolean/);
+  //   return done();
 
-    });
+  // });
 
-    const throws = function () {
-      mySuite.run(fakeLab, variables);
+});
+
+group("Conditional Expectations", () => {
+
+  let fakeLab;
+  let mySuite;
+
+  lab.beforeEach(done => {
+
+    fakeLab = {
+      test: () => {
+        return;
+      }
     };
 
-    expect(throws).to.throw(Error, /an error/);
-    return done();
+    mySuite = new suite.LabSuite();
 
-  });
-
-  lab.test("A boolean expectation throws if variable is not a boolean", done => {
-
-    mySuite.expect("BOOLEAN").to.be.a.boolean();
-
-    const variables = { SERVICE_NAME: "Name1", SERVICE_PARAMS: [1, 2, 3], BOOLEAN: "a string" };
-
-    mySuite.declare(() => {
-
-    });
-
-    const throws = function () {
-      mySuite.run(fakeLab, variables);
-    };
-
-    expect(throws).to.throw(Error, /a boolean/);
     return done();
 
   });
