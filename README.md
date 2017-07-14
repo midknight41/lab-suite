@@ -1,6 +1,8 @@
 
 # lab-suite
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/midknight41/lab-suite.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/midknight41/lab-suite.svg?branch=master)](https://travis-ci.org/midknight41/lab-suite) 
 
 **lab-suite** is a simple tool to create reusable test suites. It's quite easy to get into a pattern of cutting and pasting existing tests and then manually replacing the things that have changed but this can be time consuming and create a real maintenance nightmare.
