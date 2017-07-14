@@ -1,7 +1,9 @@
 {
-  "plugins": [
-    "transform-es2015-parameters",
-    "babel-plugin-transform-es2015-spread",
-    "transform-es2015-modules-commonjs"
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "4"
+      }
+    }]
   ]
 }
