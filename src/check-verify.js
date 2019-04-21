@@ -1,7 +1,7 @@
-import * as urlMod from "url";
-import { getValue } from "map-factory";
+const urlMod = require("url");
+const {getValue} = require("map-factory");
 
-export default class CheckVerify {
+class CheckVerify {
 
   constructor(suiteMode) {
 
@@ -20,7 +20,6 @@ export default class CheckVerify {
         return this;
       };
     }
-
   }
 
   check(field) {
@@ -277,4 +276,7 @@ function validator() {
   return new CheckVerify(false);
 }
 
-module.exports.validator = validator;
+module.exports = {
+  CheckVerify,
+  validator
+};

@@ -33,9 +33,9 @@ You can also set the expectations for the usage of the suite to make it easier f
 - anything (This doesn't perform an actual check but it's good for documenting the intended use of the suite)
 
 ```js
-import labSuite from "lab-suite";
+const {create} from "lab-suite";
 
-const suite = labSuite.create();
+const suite = create();
 
 // These expectations double as documentation for someone implementing the suite
 suite.expect("SERVICE").to.be.a.function();
@@ -66,7 +66,7 @@ suite.declare((lab, variables) => {
   });
 });
 
-export default suite;
+module.exports = suite;
 ```
 
 Additionally, you can use ```or``` to allow more flexible inputs.
@@ -84,9 +84,9 @@ Import the suite into you test file and do away with boilerplate tests. You can 
 
 ```js
 
-import serviceTestSuite from "./serviceTestSuite";
-import ServiceA from "./ServiceA";
-import ServiceB from "./ServiceB";
+const serviceTestSuite = require("./serviceTestSuite");
+import ServiceA = require("./ServiceA");
+import ServiceB = require("./ServiceB");
 
 const variablesA = {
   SERVICE: ServiceA, 
