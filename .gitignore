@@ -70,8 +70,6 @@ dist/**/*
 lib/node_modules
 lib/*.js.map
 lib/*.js
-test/*.js.map
-test/*.js
 
 #ncrunch
 *ncrunch*
