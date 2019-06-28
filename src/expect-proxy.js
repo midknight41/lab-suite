@@ -1,13 +1,12 @@
-import { default as CheckVerify, validator } from "./check-verify";
+const {CheckVerify, validator} = require("./check-verify");
 
-export default class ExpectProxy {
+class ExpectProxy {
 
   constructor(variableName) {
 
     this.checker = new CheckVerify(); // For the proxy
     this.checker.check(variableName);
     this.buildProxy_();
-
   }
 
   buildProxy_() {
@@ -21,7 +20,6 @@ export default class ExpectProxy {
       Object.defineProperty(this, propName, {
         get: () => { return this; }
       });
-
     }
 
     Object.defineProperty(this, "or", {
@@ -30,7 +28,6 @@ export default class ExpectProxy {
         return this;
       }
     });
-
 
     // map methodName to methods on CheckVerify
     for (const methodName of methods) {
@@ -49,5 +46,6 @@ export default class ExpectProxy {
 
     this.checker.verify(variables);
   }
-
 }
+
+module.exports = ExpectProxy;

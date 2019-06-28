@@ -1,8 +1,8 @@
-import assert from "assert";
-import ExpectProxy from "./expect-proxy";
-import { validator } from "./check-verify";
+const assert = require("assert");
+const ExpectProxy = require("./expect-proxy");
+const {validator} = require("./check-verify");
 
-export class LabSuite {
+class LabSuite {
 
   constructor() {
     this.expectations = [];
@@ -37,11 +37,11 @@ export class LabSuite {
     const expectation = new ExpectProxy(variableName);
     this.expectations.push(expectation);
     return expectation;
-
   }
-
 }
 
-export function create() {
+function create() {
   return new LabSuite();
 }
+
+module.exports = {create, LabSuite};
